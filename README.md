@@ -1,2 +1,1 @@
 # SpartanSocial-API
-# SpartanSocial-API
