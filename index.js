@@ -37,7 +37,7 @@ app.use('/users', userRouter);
 // get        : HTTP method. GETs data
 // '/'        : URL path
 // 'req, res' : request and response. Shorthand variables for the different API communications.
-// res.send   : response will send
+// res.send   : API response will send to the user client or server
 // This method is just used to test if the API can be connected using POSTMAN or web browser through web hosting.
 app.get('/', (req, res) => {
   res.send("You made it to the API!");
