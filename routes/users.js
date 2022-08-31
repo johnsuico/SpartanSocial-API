@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 // @access  Public
 router.route('/').get((req, res) => {
   User.find({})
-      .select('-hashedPassword')
+      .select('-hashedPassword')  // Do not send the hashed password in the API response.
       .then( users => res.send(users));
 })
 
@@ -16,7 +16,7 @@ router.route('/').get((req, res) => {
 // @access  Public
 router.route('/:id').get((req, res) => {
   User.findById(req.params.id)
-      .select('-hashedPassword')
+      .select('-hashedPassword')      // Do not send the hashed password in the API response.
       .then( user => res.json(user));
 })
 
@@ -33,9 +33,13 @@ router.route('/:id').delete((req, res) => {
     });
 })
 
+// @Route   POST /users/register
+// @desc    Register a new user
+// @access  Public
 router.route('/register').post((req, res) => {
   const BCRYPT_SALT_ROUNDS = 12;
-  const {firstName, lastName, userName, email, password } = req.body;
+  const {firstName, lastName, userName, password } = req.body;
+  const email = req.body.email.toLowerCase(0);
 
   // Validation
   if (!firstName || !lastName || !userName || !email || !password) {
@@ -72,6 +76,42 @@ router.route('/register').post((req, res) => {
           })
         })
         .catch (err => res.status(400).json('Error: ' + err));
+    })
+})
+
+// @Route   POST /users/auth
+// @desc    Authenticate User for login
+// @access  Public
+router.route('/auth').post((req, res) => {
+  const { password } = req.body;
+  const email = req.body.email.toLowerCase();
+
+  // Validation
+  if (!email || !password) {
+    return res.status(400).json({msg: 'Please enter all fields.'});
+  }
+
+  // Check for existing user
+  User.findOne( {email} )
+    .then (user => {
+      // If user is NOT found in the database, send 400 status
+      // 400 = Bad request
+      if (!user) return res.status(400).json({msg: 'User does not exist.'});
+
+      // Validate password
+      bcrypt.compare(password, user.hashedPassword)
+        .then (isMatch => {
+          if (!isMatch) return res.status(400).json({msg: 'Invalid credentials.'});
+          res.json({
+            user: {
+              user_id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              userName: user.userName,
+              email: user.email
+            }
+          })
+        })
     })
 })
 

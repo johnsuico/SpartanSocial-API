@@ -42,6 +42,14 @@ const userSchema = new mongoose.Schema ({
     type: String,
     default: ''
   },
+  gender: {
+    type: String,
+    default: ''
+  },
+  pronouns: {
+    type: String,
+    default: ''
+  },
   location: {
     type: String,
     default: ''
