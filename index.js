@@ -10,10 +10,11 @@ require('dotenv').config();
 // To use the built in body parser
 app.use(express.json());
 
+// To allow Cross Origin Resource Sharing. Allow for communication between browsers and servers.
 app.use(cors());
 
 // Database connection
-const source = process.env.MONGOOSE_URI; // You need to install dotenv for this to work. Contact John if you are having trouble.
+const source = process.env.MONGOOSE_URI; // You need to install dotenv for this to work. Contact John to get the .env.
 mongoose.connect( source, {
   useNewUrlParser: true,
   useUnifiedTopology: true

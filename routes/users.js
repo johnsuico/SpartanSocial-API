@@ -26,7 +26,7 @@ router.route('/:id').get((req, res) => {
 router.route('/:id').delete((req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(user => {
-      res.json(`User: ${user.firstName} ${user.lastName} ${user._id} has been deleted.`)
+      res.json(`User: ${user.firstName} ${user.lastName}\n User ID: ${user._id} \nSuccessfully deleted.`)
     })
     .catch(err => {
       res.json(err);

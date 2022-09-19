@@ -13,6 +13,10 @@ const userSchema = new mongoose.Schema ({
     type: String,
     required: true
   },
+  useDisplayName: {
+    type: Boolean,
+    default: false
+  },
   hashedPassword: {
     type: String,
     required: true
@@ -34,23 +38,21 @@ const userSchema = new mongoose.Schema ({
     type: String,
     default: ''
   },
-  profession: {
-    type: String,
-    default: ''
+  isStudent: {
+    type: Boolean,
+    default: false
   },
-  ethnicity: {
-    type: String,
-    default: ''
+  gradDate: {
+    type: Date
+  },
+  birthDate: {
+    type: Date
   },
   gender: {
     type: String,
     default: ''
   },
   pronouns: {
-    type: String,
-    default: ''
-  },
-  location: {
     type: String,
     default: ''
   },
