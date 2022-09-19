@@ -26,7 +26,7 @@ router.route('/:id').get((req, res) => {
 router.route('/:id').delete((req, res) => {
   User.findByIdAndDelete(req.params.id)
     .then(user => {
-      res.json(`User: ${user.firstName} ${user.lastName}\n User ID: ${user._id} \nSuccessfully deleted.`)
+      res.json(`User ID: ${user._id} Successfully deleted.`)
     })
     .catch(err => {
       res.json(err);
@@ -38,11 +38,13 @@ router.route('/:id').delete((req, res) => {
 // @access  Public
 router.route('/register').post((req, res) => {
   const BCRYPT_SALT_ROUNDS = 12;
-  const {firstName, lastName, userName, password } = req.body;
-  const email = req.body.email.toLowerCase(0);
+  // const {userEmail, password } = req.body;
+  // const userEmail = req.body.email.toLowerCase(0);
+  let {email, password } = req.body;
+  email = email.toLowerCase();
 
   // Validation
-  if (!firstName || !lastName || !userName || !email || !password) {
+  if (!email || !password) {
     return res.status(400).json({msg: 'Please enter all fields'});
   }
 
@@ -60,7 +62,7 @@ router.route('/register').post((req, res) => {
       let hashedPassword = bcrypt.hashSync(password, BCRYPT_SALT_ROUNDS);
 
       // Create newUser variable to hold all the user information needed for account creation.
-      const newUser = new User({firstName, lastName, userName, hashedPassword, email});
+      const newUser = new User({hashedPassword, email});
 
       // Save the new user into the database
       newUser.save()
@@ -68,9 +70,6 @@ router.route('/register').post((req, res) => {
           res.json({
             newRegUser: {
               user_id: newRegUser.id,
-              firstName: newRegUser.firstName,
-              lastName: newRegUser.lastName,
-              userName: newRegUser.userName,
               email: newRegUser.email
             }
           })
