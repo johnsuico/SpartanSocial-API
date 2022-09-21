@@ -2,13 +2,16 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema ({
   firstName: {
-    type: String
+    type: String,
+    default: ''
   },
   lastName:{
-    type: String
+    type: String,
+    default: ''
   },
   userName: {
     type: String,
+    default: ''
   },
   useDisplayName: {
     type: Boolean,

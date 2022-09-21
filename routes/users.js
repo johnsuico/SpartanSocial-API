@@ -78,6 +78,50 @@ router.route('/register').post((req, res) => {
     })
 })
 
+// @route   POST /users/:id/register/cp2
+// @desc    Send form from createprofile2 and update user
+// @access  PRIVATE
+router.route('/:id/register/cp2').post((req, res) => {
+  const { firstName, lastName, userName, useDisplayName, major, isStudent } = req.body;
+  const id = req.params.id;
+
+  User.findOneAndUpdate({"_id": id}, {
+    $set: {
+      firstName,
+      lastName,
+      userName,
+      useDisplayName,
+      major,
+      isStudent
+    }
+  }, {new: true}, (err, updated) => {
+    if (err) throw err;
+    res.send(updated);
+  })
+
+});
+
+// @route   POST /users/:id/register/cp2
+// @desc    Send form from createprofile3 and update user
+// @access  PRIVATE
+router.route('/:id/register/cp3').post((req, res) => {
+  const { gradDate, birthDate, pronouns, gender, bio } = req.body;
+  const id = req.params.id;
+
+  User.findOneAndUpdate({"_id": id}, {
+      $set: {
+          gradDate,
+          birthDate,
+          pronouns,
+          gender,
+          bio
+      }
+  }, {new: true}, (err, updated) => {
+      if (err) throw err;
+      res.send(updated);
+  })
+});
+
 // @Route   POST /users/auth
 // @desc    Authenticate User for login
 // @access  Public
