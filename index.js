@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
 
-let User = require('./models/user.model');
 
 require('dotenv').config();
 
@@ -32,6 +31,10 @@ mongoose.connection.on('error', console.error.bind(console, 'Connection error: '
 // Routes are used in URL path like spartansocialapi.com/users
 const userRouter = require('./routes/users');
 app.use('/users', userRouter);
+
+// Forum routes
+const forumRouter = require('./routes/forums');
+app.use('/forums', forumRouter);
 
 
 // app        : The application we are using (SpartanSocialAPI)
