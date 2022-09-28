@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const forumPost = require('./forumPost.model');
 
 const subForumSchema = new mongoose.Schema ({
   subForumTitle: {
@@ -31,7 +32,7 @@ const subForumSchema = new mongoose.Schema ({
   },
   forumPosts: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'forumPosts'
+    ref: forumPost
   }]
 })
 

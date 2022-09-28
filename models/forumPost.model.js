@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const User = require('./user.model');
 
 const forumPostSchema = new mongoose.Schema ({
   forumPostTitle: {
@@ -10,14 +9,34 @@ const forumPostSchema = new mongoose.Schema ({
     type: String,
     required: true
   },
+  forumPostCategory: {
+    type: String,
+    default: ''
+  },
   forumPostAuthor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
+  parentSubForum: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Parent'
+  },
+  postUpVotes: {
+    type: Number,
+    default: 0
+  },
+  postDownVotes: {
+    type: Number,
+    default: 0
+  },
   forumPostDate: {
     type: Date,
     default: Date.now
-  }
+  },
+  forumComments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'forumComments'
+  }]
 })
 
 const forumPost = mongoose.model('forumPost', forumPostSchema);
