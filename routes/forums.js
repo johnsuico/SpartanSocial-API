@@ -107,7 +107,7 @@ router.route('/subForum/:subForumID').get((req, res) => {
 })
 
 // @Route   DELETE /forums/subForum/:subForumID
-// @desc    Delete a specific sub forum
+// @desc    Delete a specific sub forum and remove it from subForum array in the main forum document
 // @access  Private, only done by owner and web admins/moderators
 router.route('/subForum/:subForumID').delete((req, res) => {
     subForum.findByIdAndDelete(req.params.subForumID)
@@ -150,9 +150,25 @@ router.route('/mainForum/:mainForumID/subForum').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-// @Route   POST /forums/subForum/:subForumID/upvote
+// @Route   PUT /forums/subForum/:subForumID/upvote
 // @desc    Increment upvote counter by 1
 // @access  Public
+router.route('/subForum/:subForumID/upvote').put((req, res) => {
+  subForum.findByIdAndUpdate(req.params.subForumID, 
+    {$inc: {forumUpVotes: 1}}, {new: true})
+    .then (found => res.send(found))
+    .catch (err => res.send(err));
+})
+
+// @Route   PUT /forums/subForum/:subForumID/upvote
+// @desc    Decrement downvote counter by 1
+// @access  Public
+router.route('/subForum/:subForumID/downvote').put((req, res) => {
+  subForum.findByIdAndUpdate(req.params.subForumID, 
+    {$inc: {forumDownVotes: -1}}, {new: true})
+    .then (found => res.send(found))
+    .catch (err => res.send(err));
+})
 
 
 module.exports = router;
