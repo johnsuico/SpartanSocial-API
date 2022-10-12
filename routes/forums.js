@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../models/user.model');
 const mainForum = require('../models/mainForum.model');
 const subForum = require('../models/subForum.model');
+const forumPost = require('../models/forumPost.model');
 
 // @Route   GET /forums/mainForum
 // @desc    Get all main forums
@@ -67,7 +68,7 @@ router.route('/mainForum/:id').delete((req, res) => {
     })
 })
 
-// SUBFORUMS BELOW --------------------------------------------------
+// SUBFORUMSS --------------------------------------------------
 
 // @Route   GET /forums/mainForum/:mainForumId/subForum
 // @desc    Get a main forum's subforum data
@@ -107,21 +108,20 @@ router.route('/subForum/:subForumID').get((req, res) => {
 })
 
 // @Route   DELETE /forums/subForum/:subForumID
-// @desc    Delete a specific sub forum and remove it from subForum array in the main forum document
+// @desc    Delete a specific sub forum and remove it from subForum array in the main forum document and delete all posts
 // @access  Private, only done by owner and web admins/moderators
-router.route('/subForum/:subForumID').delete((req, res) => {
-    subForum.findByIdAndDelete(req.params.subForumID)
+router.route('/subForum/:subForumId').delete((req, res) => {
+    subForum.findByIdAndDelete(req.params.subForumId)
       .then (sub => {
         mainForum.findById(sub.parentForum)
           .then (found => {
-            found.subForums.pull(req.params.subForumID);
+            found.subForums.pull(req.params.subForumId);
             res.send(found);
             found.save();
           })
           .catch (err => res.send(err));
       })
       .catch (err => res.send(err));
-
 })
 
 // @Route   POST /forums/mainForum/:mainForumID/subForum
@@ -150,25 +150,98 @@ router.route('/mainForum/:mainForumID/subForum').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-// @Route   PUT /forums/subForum/:subForumID/upvote
+// FORUM POSTS ----------------------------------------------------
+
+// @Route   GET /forums/posts/
+// @desc    Get all forum psots
+// @access  Public
+router.route('/posts').get((req, res) => {
+  forumPost.find({})
+    .then( sub => res.send(sub));
+})
+
+// @Route   GET /forums/subForum/:subForumID/post
+// @desc    Get all posts from a sub forum
+// @access  Public
+router.route('/subForum/:subForumId/post').get((req, res) => {
+  subForum.findById(req.params.subForumId)
+    .populate('forumPosts')
+    .then (found => {
+      res.send(found.forumPosts);
+    })
+})
+
+// @Route   POST /forums/subForum/:subForumID/post
+// @desc    Create a new forum post for a sub forum
+// @access  Public
+router.route('/subForum/:subForumID/post').post((req, res) => {
+  const { forumPostTitle, forumPostBody, forumPostCategory, forumPostAuthor} = req.body;
+
+  const newForumPost = new forumPost ({
+    forumPostTitle,
+    forumPostBody,
+    forumPostCategory,
+    forumPostAuthor,
+    parentSubForum: req.params.subForumID
+  })
+
+  newForumPost.save()
+    .then (newPost => {
+      subForum.findByIdAndUpdate({"_id": req.params.subForumID},
+      {$push: {'forumPosts': newPost._id}},
+      {new: true},
+      (err, updated) => {
+        if (err) throw err;
+        res.send(updated);
+      })
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+})
+
+// @Route   DELETE /forums/subForum/posts/:subForumID
+// @desc    Deletes all posts within a subforum
+// @access  Private
+router.route('/subForum/posts/:subForumId').delete((req, res) => {
+  forumPost.deleteMany({parentSubForum: req.params.subForumId})
+    .then (res.send('Deleted posts'))
+    .catch (err => res.send(err));
+})
+
+// @Route   DELETE /forums/posts/:postId
+// @desc    Delete a specific forum post and remove it from the subforum array
+// @access  Private, only done by owner and web admins/moderators
+router.route('/posts/:postId').delete((req, res) => {
+  forumPost.findByIdAndDelete(req.params.postId)
+    .then (post => {
+      subForum.findById(post.parentSubForum)
+        .then (found => {
+          found.forumPosts.pull(req.params.postId);
+          res.send(found);
+          found.save();
+        })
+        .catch (err => res.send(err));
+    })
+    .catch (err => res.send(err));
+})
+
+// @Route   PUT /forums/posts/:postId/upvote
 // @desc    Increment upvote counter by 1
 // @access  Public
-router.route('/subForum/:subForumID/upvote').put((req, res) => {
-  subForum.findByIdAndUpdate(req.params.subForumID, 
-    {$inc: {forumUpVotes: 1}}, {new: true})
+router.route('/posts/:postId/upvote').put((req, res) => {
+  forumPost.findByIdAndUpdate(req.params.postId, 
+    {$inc: {postUpVotes: 1}}, {new: true})
     .then (found => res.send(found))
     .catch (err => res.send(err));
 })
 
-// @Route   PUT /forums/subForum/:subForumID/upvote
-// @desc    Decrement downvote counter by 1
+// @Route   PUT /forums/posts/:postId/upvote
+// @desc    Decrement downvote counter by -1
 // @access  Public
-router.route('/subForum/:subForumID/downvote').put((req, res) => {
-  subForum.findByIdAndUpdate(req.params.subForumID, 
-    {$inc: {forumDownVotes: -1}}, {new: true})
+router.route('/posts/:postId/downvote').put((req, res) => {
+  forumPost.findByIdAndUpdate(req.params.postId, 
+    {$inc: {postDownVotes: -1}}, {new: true})
     .then (found => res.send(found))
     .catch (err => res.send(err));
 })
-
 
 module.exports = router;

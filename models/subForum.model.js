@@ -22,14 +22,6 @@ const subForumSchema = new mongoose.Schema ({
     type: Date,
     default: Date.now
   },
-  forumUpVotes: {
-    type: Number,
-    default: 0
-  },
-  forumDownVotes: {
-    type: Number,
-    default: 0
-  },
   forumPosts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: forumPost
