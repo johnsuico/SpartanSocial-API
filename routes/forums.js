@@ -244,11 +244,31 @@ router.route('/posts/:postId/upvote').put((req, res) => {
 })
 
 // @Route   PUT /forums/posts/:postId/upvote
+// @desc    Decrement upvote counter by 1
+// @access  Public
+router.route('/posts/:postId/removeupvote').put((req, res) => {
+  forumPost.findByIdAndUpdate(req.params.postId, 
+    {$inc: {postUpVotes: -1}}, {new: true})
+    .then (found => res.send(found))
+    .catch (err => res.send(err));
+})
+
+// @Route   PUT /forums/posts/:postId/upvote
 // @desc    Decrement downvote counter by -1
 // @access  Public
 router.route('/posts/:postId/downvote').put((req, res) => {
   forumPost.findByIdAndUpdate(req.params.postId, 
     {$inc: {postDownVotes: -1}}, {new: true})
+    .then (found => res.send(found))
+    .catch (err => res.send(err));
+})
+
+// @Route   PUT /forums/posts/:postId/upvote
+// @desc    Increment downvote counter by -1
+// @access  Public
+router.route('/posts/:postId/removedownvote').put((req, res) => {
+  forumPost.findByIdAndUpdate(req.params.postId, 
+    {$inc: {postDownVotes: 1}}, {new: true})
     .then (found => res.send(found))
     .catch (err => res.send(err));
 })
