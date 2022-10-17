@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const forumPosts = require('./forumPost.model');
+const votedPosts = require('./forumPost.model');
 
 const userSchema = new mongoose.Schema ({
   firstName: {

@@ -68,7 +68,7 @@ router.route('/mainForum/:id').delete((req, res) => {
     })
 })
 
-// SUBFORUMSS --------------------------------------------------
+// SUBFORUMS --------------------------------------------------
 
 // @Route   GET /forums/mainForum/:mainForumId/subForum
 // @desc    Get a main forum's subforum data
@@ -158,6 +158,15 @@ router.route('/mainForum/:mainForumID/subForum').post((req, res) => {
 router.route('/posts').get((req, res) => {
   forumPost.find({})
     .then( sub => res.send(sub));
+})
+
+// @Route   GET /forums/posts/:postID
+// @desc    Get a specific post
+// @access  Public
+router.route('/posts/:postID').get((req, res) => {
+  forumPost.findById(req.params.postID)
+    .then(post => res.send(post))
+    .catch(err => res.send(err));
 })
 
 // @Route   GET /forums/subForum/:subForumID/post
