@@ -63,7 +63,15 @@ const userSchema = new mongoose.Schema ({
   register_date: {
     type: Date,
     default: Date.now
-  }
+  },
+  forumPosts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: forumPosts
+  }],
+  votedPosts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: votedPosts
+  }]
 
 })
 
