@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const forumPosts = require('./forumPost.model');
-const votedPosts = require('./forumPost.model');
+const upvotedPosts = require('./forumPost.model');
+const downvotedPosts = require('./forumPost.model');
+const goingEvents = require('./events.model');
+const notGoingEvents = require('./events.model');
 
 const userSchema = new mongoose.Schema ({
   firstName: {
@@ -70,9 +73,21 @@ const userSchema = new mongoose.Schema ({
     type: mongoose.Schema.Types.ObjectId,
     ref: forumPosts
   }],
-  votedPosts: [{
+  upvotedPosts: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: votedPosts
+    ref: upvotedPosts
+  }],
+  downvotedPosts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: downvotedPosts
+  }],
+  goingEvents: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: goingEvents
+  }],
+  notGoingEvents: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref:notGoingEvents
   }]
 
 })
