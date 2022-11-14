@@ -83,7 +83,13 @@ router.route('/:eventID/going').post((req, res) => {
   (err, updated) => {
     if (err) throw err;
     res.send(updated);
-  })
+  });
+
+  User.findByIdAndUpdate(userID,
+  {$push: {'goingEvents': req.params.eventID}},
+  (err => {
+    if (err) throw err;
+  }));
 })
 
 // @Route   POST /events/:eventID/notGoing
@@ -98,7 +104,13 @@ router.route('/:eventID/notGoing').post((req, res) => {
   (err, updated) => {
     if (err) throw err;
     res.send(updated);
-  })
+  });
+
+  User.findByIdAndUpdate(userID,
+    {$push: {'notGoingEvents': req.params.eventID}},
+    (err => {
+      if (err) throw err;
+    }));
 })
 
 // @Route   DELETE /events/:eventID/going
@@ -114,6 +126,12 @@ router.route('/:eventID/going').delete((req, res) => {
       if (err) throw err;
       res.send(updated);
     })
+
+  User.findByIdAndUpdate(userID,
+    {$pull: {'goingEvents': req.params.eventID}},
+    (err => {
+      if (err) throw err;
+    }));
 })
 
 // @Route   DELETE /events/:eventID/notGoing
@@ -129,6 +147,12 @@ router.route('/:eventID/notGoing').delete((req, res) => {
       if (err) throw err;
       res.send(updated);
     })
+
+  User.findByIdAndUpdate(userID,
+    {$pull: {'notGoingEvents': req.params.eventID}},
+    (err => {
+      if (err) throw err;
+    }));
 })
 
 module.exports = router;
