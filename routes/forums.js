@@ -233,44 +233,88 @@ router.route('/posts/:postId').delete((req, res) => {
     .catch (err => res.send(err));
 })
 
-// @Route   PUT /forums/posts/:postId/upvote
+// @Route   POST /forums/posts/:postId/upvote
 // @desc    Increment upvote counter by 1
 // @access  Public
-router.route('/posts/:postId/upvote').put((req, res) => {
+router.route('/posts/:postId/upvote').post((req, res) => {
+
+  const {userID} = req.body;
+
+  // Increment upvote by one
   forumPost.findByIdAndUpdate(req.params.postId, 
     {$inc: {postUpVotes: 1}}, {new: true})
     .then (found => res.send(found))
     .catch (err => res.send(err));
+
+  // Add post ID to user
+  User.findByIdAndUpdate(userID,
+    {$push: {'upvotedPosts': req.params.postId}},
+    {new: true})
+    .then(console.log('Added post ID to user'))
+    .catch(err => res.send(err));
 })
 
-// @Route   PUT /forums/posts/:postId/upvote
+// @Route   DELETE /forums/posts/:postId/upvote
 // @desc    Decrement upvote counter by 1
 // @access  Public
-router.route('/posts/:postId/removeupvote').put((req, res) => {
+router.route('/posts/:postId/upvote').delete((req, res) => {
+
+  const {userID} = req.body;
+
+  // Decrement upvote by 1
   forumPost.findByIdAndUpdate(req.params.postId, 
     {$inc: {postUpVotes: -1}}, {new: true})
     .then (found => res.send(found))
     .catch (err => res.send(err));
+
+  // Remove post ID to user
+  User.findByIdAndUpdate(userID,
+    {$pull: {'upvotedPosts': req.params.postId}},
+    {new: true})
+    .then(console.log('Removed post ID from user'))
+    .catch(err => res.send(err));
 })
 
-// @Route   PUT /forums/posts/:postId/upvote
+// @Route   POST /forums/posts/:postId/upvote
 // @desc    Decrement downvote counter by -1
 // @access  Public
-router.route('/posts/:postId/downvote').put((req, res) => {
+router.route('/posts/:postId/downvote').post((req, res) => {
+
+  const {userID} = req.body;
+
+  // Decrement downvote by -1
   forumPost.findByIdAndUpdate(req.params.postId, 
     {$inc: {postDownVotes: -1}}, {new: true})
     .then (found => res.send(found))
     .catch (err => res.send(err));
+
+  // Remove post ID to user
+  User.findByIdAndUpdate(userID,
+    {$push: {'downvotedPosts': req.params.postId}},
+    {new: true})
+    .then(console.log('Added post ID to user'))
+    .catch(err => res.send(err));
 })
 
-// @Route   PUT /forums/posts/:postId/upvote
-// @desc    Increment downvote counter by -1
+// @Route   DELETE /forums/posts/:postId/upvote
+// @desc    Increment downvote counter by 1
 // @access  Public
-router.route('/posts/:postId/removedownvote').put((req, res) => {
+router.route('/posts/:postId/downvote').delete((req, res) => {
+
+  const {userID} = req.body;
+
+  // Increment downvote by 1
   forumPost.findByIdAndUpdate(req.params.postId, 
     {$inc: {postDownVotes: 1}}, {new: true})
     .then (found => res.send(found))
     .catch (err => res.send(err));
+
+  // Remove post ID to user
+  User.findByIdAndUpdate(userID,
+    {$pull: {'downvotedPosts': req.params.postId}},
+    {new: true})
+    .then(console.log('Removed post ID from user'))
+    .catch(err => res.send(err));
 })
 
 module.exports = router;
