@@ -10,9 +10,7 @@ require('dotenv').config();
 app.use(express.json());
 
 // To allow Cross Origin Resource Sharing. Allow for communication between browsers and servers.
-app.use(cors({
-  origin: `127.0.0.1:3000`
-}));
+app.use(cors());
 
 // Database connection
 const source = process.env.MONGOOSE_URI; // You need to install dotenv for this to work. Contact John to get the .env.
