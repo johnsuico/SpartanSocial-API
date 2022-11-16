@@ -11,7 +11,7 @@ app.use(express.json());
 
 // To allow Cross Origin Resource Sharing. Allow for communication between browsers and servers.
 app.use(cors({
-  origin: `localhost:3000`
+  origin: `127.0.0.1:3000`
 }));
 
 // Database connection
