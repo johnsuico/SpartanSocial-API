@@ -39,8 +39,7 @@ router.route('/').post((req, res) => {
       })
 
       User.findByIdAndUpdate(eventCreator,
-        {$push: {'createdEvents': newEv._id}}
-        )
+        {$push: {'createdEvents': newEv._id}});
     })
     .catch (err => res.status(400).json('Error: ' + err));
 })
@@ -69,6 +68,9 @@ router.route('/:eventID').delete((req, res) => {
   event.findByIdAndDelete(req.params.eventID)
     .then(ev => {
       res.json(`Event ID: ${ev._id} Sucessfully deleted`);
+
+      User.findByIdAndUpdate(ev.eventCreator, 
+        {$pull: {'createdEvents': ev._id}});
     })
     .catch(err => {
       res.json(err);
