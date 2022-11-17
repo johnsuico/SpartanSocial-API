@@ -51,7 +51,7 @@ router.route('/').delete((req, res) => {
 // @desc    Get a specific event
 // @access  Public
 router.route('/:eventID').get((req, res) => {
-  mainForum.findById(req.params.eventID)
+  event.findById(req.params.eventID)
     .then (ev => res.json(ev));
 })
 
