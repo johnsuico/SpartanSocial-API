@@ -37,6 +37,10 @@ router.route('/').post((req, res) => {
           eventCreator: newEvent.eventCreator
         }
       })
+
+      User.findByIdAndUpdate(eventCreator,
+        {$push: {'createdEvents': newEv._id}}
+        )
     })
     .catch (err => res.status(400).json('Error: ' + err));
 })
