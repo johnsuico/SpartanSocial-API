@@ -14,15 +14,16 @@ router.route('/').get((req, res) => {
 // @desc    Create a new event
 // @access  Private, can only access with an account
 router.route('/').post((req, res) => {
-  const {eventTitle, eventDesc, eventCreator} = req.body;
+  const {eventTitle, eventDesc, eventDate, eventCreator} = req.body;
 
-  if (!eventTitle || !eventDesc || !eventCreator) {
+  if (!eventTitle || !eventDesc || !eventDate || !eventCreator) {
     return res.status(400).json({msg: 'Please enter in all fields'});
   }
 
   const newEvent = new event({
     eventTitle,
     eventDesc,
+    eventDate,
     eventCreator
   })
 
@@ -32,6 +33,7 @@ router.route('/').post((req, res) => {
         newEv: {
           eventTitle: newEvent.eventTitle,
           eventDesc: newEvent.eventDesc,
+          eventDate: newEvent.eventDate,
           eventCreator: newEvent.eventCreator
         }
       })

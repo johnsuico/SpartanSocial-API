@@ -14,7 +14,7 @@ const eventSchema = new mongoose.Schema ({
     ref: 'Creator'
   },
   eventDate : {
-    type: String,
+    type: Date,
     required: true
   },
   going: [{
