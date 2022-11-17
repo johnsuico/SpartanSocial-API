@@ -11,6 +11,20 @@ router.route('/').get((req, res) => {
     .then(comments => res.send(comments));
 })
 
+// @Route   Get /comments/:postID
+// @desc    Get all comments in a specific post
+// @access  Public
+router.route('/:postID').get((req, res) => {
+  forumPost.findById(req.params.postID)
+    .populate('forumComments')
+    .then (found => {
+      res.send(found.forumComments)
+    })
+    .catch (err => {
+      res.send(err);
+    })
+})
+
 // @Route   post /comments/:postID
 // @desc    Post a comment to a post and add it to forumComments array in both user and parent post
 // @access  Private
@@ -59,7 +73,7 @@ router.route('/:postID').post((req, res) => {
   }
 })
 
-// @Route   GET /comments/:postID
+// @Route   GET /comments/:postID/:commentID
 // @dec     Get a specific comment from a post
 // @access  Public
 router.route('/:postID/:commentID').get((req, res) => {

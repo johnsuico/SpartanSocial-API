@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const forumComments = require('./postComment.model');
 
 const forumPostSchema = new mongoose.Schema ({
   forumPostTitle: {
@@ -35,7 +36,7 @@ const forumPostSchema = new mongoose.Schema ({
   },
   forumComments: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'forumComments'
+    ref: forumComments
   }]
 })
 
