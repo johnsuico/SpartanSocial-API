@@ -40,6 +40,10 @@ app.use('/forums', forumRouter);
 const eventRouter = require('./routes/events');
 app.use('/events', eventRouter);
 
+// Comment routes
+const commentRouter = require('./routes/comments');
+app.use('/comments', commentRouter);
+
 
 // app        : The application we are using (SpartanSocialAPI)
 // get        : HTTP method. GETs data

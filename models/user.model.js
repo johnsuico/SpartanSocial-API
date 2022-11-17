@@ -88,6 +88,18 @@ const userSchema = new mongoose.Schema ({
   notGoingEvents: [{
     type: mongoose.Schema.Types.ObjectId,
     ref:notGoingEvents
+  }],
+  forumComments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'forumComments'
+  }],
+  upvotedComments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'upvotedComments'
+  }],
+  downvotedComments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'downvotedComments'
   }]
 
 })
