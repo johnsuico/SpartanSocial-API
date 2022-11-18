@@ -159,13 +159,41 @@ router.route('/auth').post((req, res) => {
 })
 
 // @Route   GET /users/:userID/posts
-// @desc    Get all posts from a uer
+// @desc    Get all posts from a user
 // @access  Public
 router.route('/:userID/posts').get((req, res) => {
   User.findById(req.params.userID)
     .populate('forumPosts')
     .then (found => {
       res.send(found.forumPosts);
+    })
+    .catch (err => {
+      res.send(err);
+    })
+})
+
+// @Route   GET /users/:userID/comments
+// @desc    Get all comments from a user
+// @access  Public
+router.route('/:userID/comments').get((req, res) => {
+  User.findById(req.params.userID)
+    .populate('forumComments')
+    .then (found => {
+      res.send(found.forumComments);
+    })
+    .catch (err => {
+      res.send(err);
+    })
+})
+
+// @Route   GET /users/:userID/events
+// @desc    Get all events from a user
+// @access  Public
+router.route('/:userID/events').get((req, res) => {
+  User.findById(req.params.userID)
+    .populate('createdEvents')
+    .then (found => {
+      res.send(found.createdEvents);
     })
     .catch (err => {
       res.send(err);
