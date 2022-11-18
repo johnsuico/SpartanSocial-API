@@ -5,6 +5,7 @@ const downvotedPosts = require('./forumPost.model');
 const goingEvents = require('./events.model');
 const notGoingEvents = require('./events.model');
 const events = require('./events.model');
+const forumComments = require('./postComment.model');
 
 const userSchema = new mongoose.Schema ({
   firstName: {
@@ -96,7 +97,7 @@ const userSchema = new mongoose.Schema ({
   }],
   forumComments: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'forumComments'
+    ref: forumComments
   }],
   upvotedComments: [{
     type: mongoose.Schema.Types.ObjectId,

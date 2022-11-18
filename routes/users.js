@@ -158,4 +158,18 @@ router.route('/auth').post((req, res) => {
     })
 })
 
+// @Route   GET /users/:userID/posts
+// @desc    Get all posts from a uer
+// @access  Public
+router.route('/:userID/posts').get((req, res) => {
+  User.findById(req.params.userID)
+    .populate('forumPosts')
+    .then (found => {
+      res.send(found.forumPosts);
+    })
+    .catch (err => {
+      res.send(err);
+    })
+})
+
 module.exports = router;

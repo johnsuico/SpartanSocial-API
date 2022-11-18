@@ -196,13 +196,16 @@ router.route('/subForum/:subForumID/post').post((req, res) => {
 
   newForumPost.save()
     .then (newPost => {
-      subForum.findByIdAndUpdate({"_id": req.params.subForumID},
-      {$push: {'forumPosts': newPost._id}},
-      {new: true},
-      (err, updated) => {
-        if (err) throw err;
-        res.send(updated);
-      })
+      subForum.findByIdAndUpdate(req.params.subForumID,
+        {$push: {'forumPosts': newPost._id}},
+        {new: true})
+        .then (() => {
+          User.findByIdAndUpdate(newPost.forumPostAuthor,
+            {$push: {'forumPosts': newPost._id}},
+            {new: true})
+            .then (user => res.send(user))
+            .catch (err => res.send(err));
+        })
     })
     .catch(err => res.status(400).json('Error: ' + err));
 })
@@ -222,13 +225,16 @@ router.route('/subForum/posts/:subForumId').delete((req, res) => {
 router.route('/posts/:postId').delete((req, res) => {
   forumPost.findByIdAndDelete(req.params.postId)
     .then (post => {
-      subForum.findById(post.parentSubForum)
-        .then (found => {
-          found.forumPosts.pull(req.params.postId);
-          res.send(found);
-          found.save();
+      subForum.findByIdAndUpdate(post.parentSubForum,
+        {$pull: {'forumPosts': req.params.postId}},
+        {new: true})
+        .then(() => {
+          User.findByIdAndUpdate(post.forumPostAuthor,
+            {$pull: {'forumPosts': post._id}},
+            {new: true})
+            .then (user => res.send(user))
+            .catch (err => res.send(err));
         })
-        .catch (err => res.send(err));
     })
     .catch (err => res.send(err));
 })
