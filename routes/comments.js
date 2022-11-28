@@ -55,7 +55,7 @@ router.route('/:postID').post((req, res) => {
           }
         })
 
-        User.findOneAndUpdate(comment.commentAuthor,
+        User.findByIdAndUpdate(comment.commentAuthor,
           {$push: {'forumComments': comment._id}},
           (err => {
             if (err) throw err;
