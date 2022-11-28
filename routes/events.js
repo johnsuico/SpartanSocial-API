@@ -14,7 +14,7 @@ router.route('/').get((req, res) => {
 // @desc    Create a new event
 // @access  Private, can only access with an account
 router.route('/').post((req, res) => {
-  const {eventTitle, eventDesc, eventDate, eventCreator} = req.body;
+  const {eventTitle, eventDesc, eventDate, eventCreator, eventLocation} = req.body;
 
   if (!eventTitle || !eventDesc || !eventDate || !eventCreator) {
     return res.status(400).json({msg: 'Please enter in all fields'});
@@ -24,7 +24,8 @@ router.route('/').post((req, res) => {
     eventTitle,
     eventDesc,
     eventDate,
-    eventCreator
+    eventCreator,
+    eventLocation
   })
 
   newEvent.save()

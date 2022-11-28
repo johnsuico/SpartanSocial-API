@@ -13,6 +13,9 @@ const eventSchema = new mongoose.Schema ({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Creator'
   },
+  eventLocation: {
+    type: String
+  },
   eventDate : {
     type: Date,
     required: true
