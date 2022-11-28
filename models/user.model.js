@@ -50,7 +50,8 @@ const userSchema = new mongoose.Schema ({
     default: false
   },
   gradDate: {
-    type: Date
+    type: String,
+    default: ''
   },
   birthDate: {
     type: Date
