@@ -118,7 +118,15 @@ router.route('/:id/register/cp3').post((req, res) => {
       }
   }, {new: true}, (err, updated) => {
       if (err) throw err;
-      res.send(updated);
+      res.json({
+        user: {
+          user_id: updated.id,
+          firstName: updated.firstName,
+          lastName: updated.lastName,
+          userName: updated.userName,
+          email: updated.email
+        }
+      });
   })
 });
 
