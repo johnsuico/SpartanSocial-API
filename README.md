@@ -8,7 +8,7 @@ This holds all of the backend code for the SpartanSocial website.
 ## Read first
 Creating a local instance of the SpartanSocial API is not needed in order to demo the SpartanSocial website. To use SpartanSocial just clone and setup the frontend code in order to use your own local instance of SpartanSocial.
 
-<a href="https://github.com/johnsuico/SpartanSocial-FrontEnd" target="_blank">Frontend Code</a>
+[Frontend Repo](https://github.com/johnsuico/SpartanSocial-FrontEnd)
 
 Creating your own local instance of the SpartanSocial API requires you to change some code in the frontend and backend. You will also need to setup your own MongoDB Database through MongoDB Atlas.
 
